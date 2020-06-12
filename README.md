@@ -1,7 +1,8 @@
 <img src=".github/logo.png" height="250px">
 
-# react-console-emulator
+# react-console-emulator-fork
 
+Note: this is a fork of [react-console-emulator](https://github.com/linuswillner/react-console-emulator).
 A simple, powerful and highly customisable Unix terminal emulator for React.
 
 [Live demo](https://linuswillner.me/react-console-emulator/)  
