@@ -1,6 +1,6 @@
 {
   "name": "react-console-emulator-fork",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "A fork of linuswillner's terminal emulator component for React.",
   "main": "dist/Terminal.js",
   "files": [
