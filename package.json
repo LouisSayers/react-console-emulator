@@ -1,7 +1,7 @@
 {
-  "name": "react-console-emulator",
+  "name": "react-console-emulator-fork",
   "version": "4.0.1",
-  "description": "A simple terminal emulator component for React.",
+  "description": "A fork of linuswillner's terminal emulator component for React.",
   "main": "dist/Terminal.js",
   "files": [
     "dist/**"
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/linuswillner/react-console-emulator.git"
+    "url": "git+https://github.com/LouisSayers/react-console-emulator.git"
   },
   "keywords": [
     "react",
@@ -30,12 +30,12 @@
     "react-component",
     "terminal"
   ],
-  "author": "Linus Willner <hello@linuswillner.me>",
+  "author": "Louis Sayers <hello@louissayers.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/linuswillner/react-console-emulator/issues"
+    "url": "https://github.com/LouisSayers/react-console-emulator/issues"
   },
-  "homepage": "https://github.com/linuswillner/react-console-emulator#readme",
+  "homepage": "https://github.com/LouisSayers/react-console-emulator#readme",
   "devDependencies": {
     "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.2",
