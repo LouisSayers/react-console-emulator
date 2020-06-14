@@ -122,10 +122,36 @@ export default class App extends Component {
             }
           }}
           messageStyle={{ color: 'red' }} // Message colour
+          errorStyle={{ color: '#e87272' }}
           noEchoBack
           welcomeMessage={[
             'This terminal uses manual pushing, yet works as any normal terminal. Check the help command for more information.',
             'This terminal also has custom message styling.'
+          ]}
+        />
+      },
+      {
+        title: 'Manual pushing of an error with custom terminal error colour',
+        link: 'https://github.com/linuswillner/react-console-emulator/blob/master/demo/App.jsx#L112-L129',
+        component: <Terminal
+          style={globalStyles}
+          ref={this.terminal}
+          commands={{
+            wait: {
+              description: 'Waits 1000 ms and then pushes an error to the output.',
+              fn: () => {
+                const terminal = this.terminal.current
+                setTimeout(() => terminal.pushToStdout('This is an error!', { isError: true }), 1000)
+                return 'Running, please wait...'
+              }
+            }
+          }}
+          errorStyle={{ color: '#e87272' }}
+          noEchoBack
+          welcomeMessage={[
+            'This terminal uses manual pushing of an error.',
+            'Run the wait command to see the error.',
+            'This terminal also has custom error styling.'
           ]}
         />
       },

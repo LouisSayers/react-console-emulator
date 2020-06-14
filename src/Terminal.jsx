@@ -84,9 +84,11 @@ export default class Terminal extends Component {
    *  isEcho: For distinguishing echo messages (Exemption from message styling)
    * }
    */
-  pushToStdout = (message, options) => {
+  pushToStdout = (message, options = {}) => {
     const { stdout } = this.state
-    stdout.push({ message, isEcho: options?.isEcho || false })
+    const { isEcho = false, isError = false } = options
+
+    stdout.push({ message, isEcho, isError })
 
     /* istanbul ignore next: Covered by interactivity tests */
     if (options?.rawInput) this.pushToHistory(options.rawInput)
@@ -108,12 +110,25 @@ export default class Terminal extends Component {
     const stdout = !this.props.noNewlineParsing ? parseEOL(this.state.stdout) : this.state.stdout
 
     return stdout.map((line, i) => {
+      let className = ''
+      let style = {}
+
+      if (!line.isEcho) {
+        className += (this.props.messageClassName || '')
+        style = { ...style, ...this.props.messageStyle }
+      }
+
+      if (line.isError) {
+        className += (this.props.errorClassName || '')
+        style = { ...style, ...this.props.errorStyle }
+      }
+
       return <TerminalMessage
         key={i}
         content={line.message}
         dangerMode={this.props.dangerMode}
-        className={!line.isEcho ? this.props.messageClassName : /* istanbul ignore next: Covered by interactivity tests */ undefined}
-        style={!line.isEcho ? this.props.messageStyle : /* istanbul ignore next: Covered by interactivity tests */ undefined}
+        className={className || undefined}
+        style={style}
       />
     })
   }
@@ -166,7 +181,9 @@ export default class Terminal extends Component {
           const cmd = this.state.commands[command]
           const res = cmd.fn(...args)
 
-          this.pushToStdout(res)
+          if (typeof res !== 'undefined') {
+            this.pushToStdout(res)
+          }
           commandResult.result = res
           if (cmd.explicitExec) cmd.fn(...args)
         }

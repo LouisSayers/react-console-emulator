@@ -119,6 +119,40 @@ describe('Terminal welcome messages', () => {
   })
 })
 
+describe('#pushToStdout with error', () => {
+  let wrapper, instance
+  const errorClassName = 'an-error-class'
+
+  beforeEach(() => {
+    wrapper = mount(
+      <Terminal
+        commands={noCommands}
+        errorClassName={errorClassName}
+      />
+    )
+    instance = wrapper.instance()
+  })
+
+  afterEach(() => {
+    wrapper.unmount()
+  })
+
+  function expectErrorToRender (input, expectedOutput) {
+    instance.pushToStdout(input, { isError: true })
+    wrapper.update()
+
+    const content = wrapper.find('[name="react-console-emulator__content"]')
+    expect(content.childAt(0).hasClass(errorClassName)).toBe(true)
+    expect(content.childAt(0).text()).toBe(expectedOutput)
+  }
+
+  it('Renders an error in the terminal', () => {
+    const input = 'some error'
+    const expectedOutput = `${input}`
+    expectErrorToRender(input, expectedOutput)
+  })
+})
+
 describe('#pushToStdout', () => {
   let wrapper, instance
 

@@ -13,10 +13,10 @@ export default stdout => {
 
   for (let i = 0; i < stdout.length; i++) {
     const currentLine = stdout[i]
-    const { message, isEcho } = currentLine
+    const { message, isEcho, isError } = currentLine
 
     if (!isEcho && (typeof message !== 'string')) {
-      parsedStdout.push({ message: lineItemToString(message), isEcho: false })
+      parsedStdout.push({ message: lineItemToString(message), isEcho: false, isError })
       continue
     }
 
@@ -24,7 +24,7 @@ export default stdout => {
     const messageText = innerText(message)
     const parsed = !isEcho && /\\n/g.test(messageText) ? messageText.split(/\\n/g) : [messageText]
     for (const line of parsed) {
-      parsedStdout.push({ message: line, isEcho: currentLine.isEcho })
+      parsedStdout.push({ message: line, isEcho, isError })
     }
   }
 
