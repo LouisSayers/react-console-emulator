@@ -70,5 +70,6 @@ The default styles for the terminal can be found in [src/defs/styles/Terminal.js
 | promptLabelStyle / promptLabelClassName | Prompt label (The prefix for the input). |
 | inputStyle / inputClassName | Text input field. |
 | messageStyle / messageClassName | Terminal messages (Incl. command echoes if enabled via the `styleEchoBack` prop). |
+| errorStyle / errorClassName | Terminal errors. |
 
 Examples on how to override the terminal styles can be found in [src/App.jsx](../src/App.jsx).

@@ -46,7 +46,8 @@ const commandTypes = {
 
 const messageTypes = {
   messageStyle: PropTypes.object,
-  messageClassName: PropTypes.string
+  messageClassName: PropTypes.string,
+  errorClassName: PropTypes.string
 }
 
 export default {
