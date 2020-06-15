@@ -165,6 +165,16 @@ export default class App extends Component {
         />
       },
       {
+        title: 'Keymap demo',
+        link: 'https://github.com/linuswillner/react-console-emulator/blob/master/demo/App.jsx#L136-L138',
+        component: <Terminal
+          style={globalStyles}
+          commands={commands}
+          keymap={[{ alt: true, key: 'å', fn: () => alert('alt+a pressed') }]}
+          welcomeMessage='The terminal allows you to map key presses to custom functions. Press alt+a to launch an alert.'
+        />
+      },
+      {
         title: 'EOL parsing enabled',
         link: 'https://github.com/linuswillner/react-console-emulator/blob/master/demo/App.jsx#L145-L151',
         component: <Terminal

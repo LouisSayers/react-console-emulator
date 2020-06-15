@@ -16,12 +16,14 @@ import types from './defs/types/Terminal'
 
 // Utils
 import commandExists from './utils/commandExists'
+import { createKeymap, keyFromEvent } from './handlers/keymap'
 
 export default class Terminal extends Component {
   constructor (props) {
     super(props)
     this.state = {
       commands: {},
+      keymap: {},
       stdout: [],
       history: [],
       historyPosition: null,
@@ -55,6 +57,23 @@ export default class Terminal extends Component {
     const { commands, noDefaults, ignoreCommandCase } = this.props
     const validCommands = validateCommands(commands, this.showHelp, this.clearStdout, { noDefaults, ignoreCommandCase })
     this.setState({ commands: validCommands })
+  }
+
+  getDefaultKeymap = () => {
+    const self = this
+    return [
+      { key: 'Enter', fn: () => self.processCommand() },
+      { key: 'ArrowUp', fn: () => self.scrollHistory('up') },
+      { key: 'ArrowDown', fn: () => self.scrollHistory('down') }
+    ]
+  }
+
+  validateKeymap = () => {
+    const { keymap: keymapArr } = this.props
+    const defaultKeymap = createKeymap(this.getDefaultKeymap())
+    const keymap = createKeymap(keymapArr)
+
+    this.setState({ keymap: { ...defaultKeymap, ...keymap } })
   }
 
   showWelcomeMessage = () => {
@@ -214,20 +233,26 @@ export default class Terminal extends Component {
 
   /* istanbul ignore next: Covered by interactivity tests */
   handleInput = event => {
-    switch (event.key) {
-      case 'Enter': this.processCommand(); break
-      case 'ArrowUp': this.scrollHistory('up'); break
-      case 'ArrowDown': this.scrollHistory('down'); break
+    const { keymap } = this.state
+    const shortcut = keymap[keyFromEvent(event)]
+
+    if (!shortcut) {
+      return
     }
+
+    shortcut.fn(event)
+    event.preventDefault()
   }
 
   componentDidUpdate (prevProps) {
     // If there was a change in commands, re-validate
     if (!isEqual(prevProps.commands, this.props.commands)) this.validateCommands()
+    if (!isEqual(prevProps.keymap, this.props.keymap)) this.validateKeymap()
   }
 
   componentDidMount () {
     this.validateCommands()
+    this.validateKeymap()
     if (this.props.welcomeMessage) this.showWelcomeMessage()
     /* istanbul ignore next: Covered by interactivity tests */
     if (this.props.autoFocus) this.focusTerminal()
