@@ -22,7 +22,7 @@ export default stdout => {
 
     // Do not parse echoes (Raw inputs)
     const messageText = innerText(message)
-    const parsed = !isEcho && /\\n/g.test(messageText) ? messageText.split(/\\n/g) : [messageText]
+    const parsed = !isEcho && /\n|\\n/g.test(messageText) ? messageText.split(/\n|\\n/g) : [messageText]
     for (const line of parsed) {
       parsedStdout.push({ message: line, isEcho, isError })
     }
