@@ -167,6 +167,43 @@ export default class Terminal extends Component {
     this.terminalInput.current.value = ''
   }
 
+  executeCommand = (rawCommand) => {
+    this.setState({ processing: true }, async () => {
+      const args = []
+      const commandResult = { command: null, args: [], rawInput: null, result: null }
+      const {exists, command} = commandExists(this.state.commands, rawCommand, this.props.ignoreCommandCase)
+
+      if (!this.props.noHistory) this.pushToHistory(rawCommand)
+
+      if (!this.props.noEchoBack) {
+        // Mimic native terminal by echoing command back
+        this.pushToStdout(constructEcho(this.props.promptLabel || '$', rawCommand, this.props), { isEcho: true })
+      }
+
+      if (!exists) {
+        this.pushToStdout(this.props.errorText
+          ? this.props.errorText.replace(/\[command\]/gi, command)
+          : `Command '${rawCommand}' not found!`
+        )
+      } else {
+        const cmd = this.state.commands[command]
+        const res = await cmd.fn(...args)
+
+        if (typeof res !== 'undefined') {
+          this.pushToStdout(res)
+        }
+        commandResult.result = res
+        if (cmd.explicitExec) await cmd.fn(...args)
+      }
+
+      this.setState({ processing: false }, () => {
+        this.clearInput()
+        if (!this.props.noAutoScroll) this.scrollToBottom()
+        if (this.props.commandCallback) this.props.commandCallback(commandResult)
+      })
+    })
+  }
+
   /* istanbul ignore next: Covered by interactivity tests */
   processCommand = () => {
     this.setState({ processing: true }, async () => {
